@@ -21,7 +21,7 @@ const projects = [
 ];
 </script>
 <template>
-  <section id="proyek" class="py-20 bg-white">
+  <section id="proyek" class="py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
     <div class="container mx-auto px-6">
       <SectionTitle title="Proyek Unggulan" />
 
@@ -29,7 +29,7 @@ const projects = [
         <div
           v-for="project in projects"
           :key="project.title"
-          class="bg-gray-50 rounded-lg shadow-lg overflow-hidden"
+          class="bg-gray-50 dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden transition-colors duration-300"
         >
           <img
             :src="project.image"
@@ -38,11 +38,11 @@ const projects = [
           >
 
           <div class="p-6">
-            <h3 class="text-2xl font-bold text-gray-800 mb-2">
+            <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-2 transition-colors duration-300">
               {{ project.title }}
             </h3>
 
-            <p class="text-gray-600 mb-4">
+            <p class="text-gray-600 dark:text-gray-300 mb-4 transition-colors duration-300">
               {{ project.description }}
             </p>
 
@@ -50,7 +50,7 @@ const projects = [
               <span
                 v-for="tech in project.tech"
                 :key="tech"
-                class="inline-block bg-blue-100 text-blue-800 text-sm font-semibold mr-2 mb-2 px-2.5 py-0.5 rounded-full"
+                class="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-sm font-semibold mr-2 mb-2 px-2.5 py-0.5 rounded-full transition-colors duration-300"
               >
                 {{ tech }}
               </span>
@@ -60,7 +60,7 @@ const projects = [
               :href="project.link"
               target="_blank"
               rel="noopener noreferrer"
-              class="text-blue-600 font-semibold hover:underline"
+              class="text-blue-600 dark:text-blue-400 font-semibold hover:underline transition-colors duration-300"
             >
               Lihat Detail &rarr;
             </a>
