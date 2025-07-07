@@ -4,11 +4,12 @@ import SectionTitle from './SectionTitle.vue';
 // Data ini akan kita pindah ke backend nanti
 const educationHistory = [
   { id: 1, period: '2023 - Sekarang', institution: 'Universitas Amikom Yogyakarta', major: 'S1 - Informatika' },
-  { id: 2, period: '2020 - 2023', institution: 'Madrasah Aliyah Negri PASER', major: 'MIPA' }
+  { id: 2, period: '2020 - 2023', institution: 'Madrasah Aliyah Negeri Paser', major: 'MIPA' },
+  { id: 3, period: '2017 - 2020', institution: 'Madrasah Tsanawiyah Negeri 3 Paser', major: 'Umum' }
 ];
 </script>
 <template>
-  <section id="pendidikan" class="py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
+  <section id="pendidikan" class="py-5 bg-white dark:bg-gray-900 transition-colors duration-300">
     <div class="container mx-auto px-6">
       <SectionTitle title="Riwayat Pendidikan" />
 

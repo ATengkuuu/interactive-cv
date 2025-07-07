@@ -1,10 +1,11 @@
 <template>
   <header class="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50 animate-fade-in transition-colors duration-300">
-    <nav class="container mx-auto px-6 py-4">
+    <nav class="container mx-auto px-2 py-4">
       <div class="flex justify-between items-center">
         <!-- Logo/Brand -->
-        <div class="text-2xl font-bold text-gray-800 dark:text-white transition-colors duration-300">
-          Agi Tengku
+        <div class="flex items-center space-x-2 text-lg sm:text-xl font-bold text-gray-800 dark:text-white transition-colors duration-300">
+          <span class="text-blue-600 dark:text-blue-400 font-mono">&lt;/&gt;</span>
+          <span>CodeSeed: Growing Into Greatness</span>
         </div>
 
         <!-- Desktop Menu -->
@@ -12,6 +13,7 @@
           <li>
             <a
               href="#profil"
+              @click="scrollToSection"
               class="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transform hover:-translate-y-0.5 transition-all duration-300"
             >
               Profil
@@ -20,6 +22,7 @@
           <li>
             <a
               href="#pendidikan"
+              @click="scrollToSection"
               class="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transform hover:-translate-y-0.5 transition-all duration-300"
             >
               Pendidikan
@@ -28,6 +31,7 @@
           <li>
             <a
               href="#skill"
+              @click="scrollToSection"
               class="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transform hover:-translate-y-0.5 transition-all duration-300"
             >
               Skill
@@ -36,6 +40,7 @@
           <li>
             <a
               href="#proyek"
+              @click="scrollToSection"
               class="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transform hover:-translate-y-0.5 transition-all duration-300"
             >
               Proyek
@@ -44,6 +49,7 @@
           <li>
             <a
               href="#kontak"
+              @click="scrollToSection"
               class="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transform hover:-translate-y-0.5 transition-all duration-300"
             >
               Kontak
@@ -147,7 +153,7 @@
           <li>
             <a
               href="#profil"
-              @click="closeMobileMenu"
+              @click="scrollToSection"
               class="block py-2 px-4 text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded transition-colors duration-300"
             >
               Profil
@@ -156,7 +162,7 @@
           <li>
             <a
               href="#pendidikan"
-              @click="closeMobileMenu"
+              @click="scrollToSection"
               class="block py-2 px-4 text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded transition-colors duration-300"
             >
               Pendidikan
@@ -165,7 +171,7 @@
           <li>
             <a
               href="#skill"
-              @click="closeMobileMenu"
+              @click="scrollToSection"
               class="block py-2 px-4 text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded transition-colors duration-300"
             >
               Skill
@@ -174,7 +180,7 @@
           <li>
             <a
               href="#proyek"
-              @click="closeMobileMenu"
+              @click="scrollToSection"
               class="block py-2 px-4 text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded transition-colors duration-300"
             >
               Proyek
@@ -183,7 +189,7 @@
           <li>
             <a
               href="#kontak"
-              @click="closeMobileMenu"
+              @click="scrollToSection"
               class="block py-2 px-4 text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded transition-colors duration-300"
             >
               Kontak
@@ -216,6 +222,33 @@ const toggleMobileMenu = () => {
 // Close mobile menu
 const closeMobileMenu = () => {
   isMenuOpen.value = false;
+};
+
+// Smooth scroll to section
+const scrollToSection = (event) => {
+  event.preventDefault();
+
+  // Get the target section ID from href
+  const targetId = event.target.getAttribute('href').substring(1);
+  const targetElement = document.getElementById(targetId);
+
+  if (targetElement) {
+    // Calculate offset for sticky navbar (80px)
+    const offset = 80;
+    const elementPosition = targetElement.getBoundingClientRect().top;
+    const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+    // Smooth scroll to target
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: 'smooth'
+    });
+
+    // Close mobile menu if open
+    closeMobileMenu();
+  } else {
+    console.warn(`Element with ID "${targetId}" not found`);
+  }
 };
 
 // Toggle dark mode
