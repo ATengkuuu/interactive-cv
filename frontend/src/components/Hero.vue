@@ -176,7 +176,7 @@
                 <div class="text-sm text-gray-600 dark:text-gray-300">Project Selesai</div>
               </div>
               <div class="text-center p-4 bg-white dark:bg-gray-700 rounded-lg transition-colors duration-300">
-                <div class="text-2xl font-bold text-purple-600 dark:text-purple-400">3+</div>
+                <div class="text-2xl font-bold text-purple-600 dark:text-purple-400">6+</div>
                 <div class="text-sm text-gray-600 dark:text-gray-300">Teknologi Dikuasai</div>
               </div>
               <div class="text-center p-4 bg-white dark:bg-gray-700 rounded-lg transition-colors duration-300">
