@@ -1,6 +1,7 @@
 <script setup>
 defineOptions({ name: 'EducationSection' });
 import SectionTitle from './SectionTitle.vue';
+
 // Data ini akan kita pindah ke backend nanti
 const educationHistory = [
   { id: 1, period: '2023 - Sekarang', institution: 'Universitas Amikom Yogyakarta', major: 'S1 - Informatika' },
@@ -11,16 +12,21 @@ const educationHistory = [
 <template>
   <section id="pendidikan" class="py-5 bg-white dark:bg-gray-900 transition-colors duration-300">
     <div class="container mx-auto px-6">
-      <SectionTitle title="Riwayat Pendidikan" />
+      <!-- Animated Section Title -->
+      <div class="animate-fade-in">
+        <SectionTitle title="Riwayat Pendidikan" />
+      </div>
 
       <div class="relative">
+        <!-- Animated Timeline Line -->
         <div
-          class="absolute h-full border-r-2 border-gray-300 dark:border-gray-600 transition-colors duration-300"
+          class="absolute h-full border-r-2 border-gray-300 dark:border-gray-600 transition-colors duration-300 animate-fade-in"
           style="left: 50%;"
         ></div>
 
         <div v-for="(edu, index) in educationHistory" :key="edu.id"
           class="mb-8 flex justify-between items-center w-full"
+          :class="index % 2 === 0 ? 'timeline-item-left' : 'timeline-item-right'"
         >
           <div v-if="index % 2 === 0" class="w-full flex">
             <div class="w-1/2 pr-8 text-right">

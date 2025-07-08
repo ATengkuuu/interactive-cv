@@ -5,14 +5,14 @@
       <div class="flex flex-col items-center text-center">
 
         <!-- First Line of Name -->
-        <div class="animate-slide-in-left -mb-2" style="animation-delay: 200ms;">
+        <div class="animate-fade-in">
           <h1 class="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-gray-800 dark:text-white transition-colors duration-300">
             Halo Guys, I'm
           </h1>
         </div>
 
         <!-- Tilted Photo Profile in Center -->
-        <div class="animate-slide-in-up flex justify-center -mt-2" style="animation-delay: 400ms;">
+        <div class="animate-slide-in-up flex justify-center -mt-2">
           <div
             ref="tiltContainer"
             class="relative cursor-pointer w-36 h-40 sm:w-44 sm:h-48 md:w-52 md:h-56 lg:w-60 lg:h-64"
@@ -58,7 +58,7 @@
 
 
         <!-- I'M with Rotating Text -->
-        <div class="animate-slide-in-left -mt-4" style="animation-delay: 600ms;">
+        <div class="animate-fade-in -mt-4">
           <div class="flex items-center justify-center gap-2 sm:gap-3 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold">
             <h2 class="text-gray-800 dark:text-white transition-colors duration-300">
               I'm
@@ -75,7 +75,7 @@
         </div>
 
         <!-- About Button -->
-        <div class="animate-slide-in-left mt-4 sm:mt-2" style="animation-delay: 1000ms;">
+        <div class="animate-fade-in mt-4 sm:mt-2">
           <button
             @click="toggleAbout"
             class="bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-bold py-2 px-4 sm:py-3 sm:px-6 rounded-lg transition-all duration-300 inline-block shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-sm sm:text-base"
@@ -90,23 +90,35 @@
     <div
       ref="aboutSection"
       v-show="isAboutOpen"
-      class="transition-all duration-500 ease-in-out mt-4"
+      class="transition-all duration-700 ease-in-out mt-4"
       :class="{
-        'opacity-100': isAboutOpen,
-        'opacity-0': !isAboutOpen
+        'opacity-100 translate-y-0': isAboutOpen,
+        'opacity-0 translate-y-8': !isAboutOpen
       }"
     >
       <div class="container mx-auto px-4 sm:px-6 pb-20">
         <div class="max-w-4xl mx-auto">
           <!-- About Me Content -->
           <div class="bg-gray-50 dark:bg-gray-800 rounded-lg shadow-lg p-8 transition-colors duration-300">
-            <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-6 text-center">
+            <h2
+              class="text-3xl font-bold text-gray-800 dark:text-white mb-6 text-center transition-all duration-700 ease-in-out"
+              :class="{
+                'opacity-100 translate-y-0': isAboutOpen,
+                'opacity-0 translate-y-4': !isAboutOpen
+              }"
+            >
               Tentang Saya
             </h2>
 
             <div class="grid md:grid-cols-2 gap-8">
               <!-- Personal Info -->
-              <div class="space-y-4">
+              <div
+                class="space-y-4 transition-all duration-700 ease-in-out"
+                :class="{
+                  'opacity-100 translate-x-0': isAboutOpen,
+                  'opacity-0 -translate-x-8': !isAboutOpen
+                }"
+              >
                 <h3 class="text-xl font-semibold text-blue-600 dark:text-blue-400">
                   Informasi Personal
                 </h3>
@@ -120,7 +132,13 @@
               </div>
 
               <!-- About Description -->
-              <div class="space-y-4">
+              <div
+                class="space-y-4 transition-all duration-700 ease-in-out"
+                :class="{
+                  'opacity-100 translate-x-0': isAboutOpen,
+                  'opacity-0 translate-x-8': !isAboutOpen
+                }"
+              >
                 <h3 class="text-xl font-semibold text-blue-600 dark:text-blue-400">
                   Tentang Saya
                 </h3>
@@ -142,7 +160,13 @@
             </div>
 
             <!-- Interests/Hobbies -->
-            <div class="mt-8">
+            <div
+              class="mt-8 transition-all duration-500 ease-in-out"
+              :class="{
+                'opacity-100 translate-y-0': isAboutOpen,
+                'opacity-0 translate-y-4': !isAboutOpen
+              }"
+            >
               <h3 class="text-xl font-semibold text-blue-600 dark:text-blue-400 mb-4">
                 Minat & Hobi
               </h3>
@@ -166,7 +190,13 @@
             </div>
 
             <!-- Quick Stats -->
-            <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div
+              class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4 transition-all duration-700 ease-in-out"
+              :class="{
+                'opacity-100 translate-y-0': isAboutOpen,
+                'opacity-0 translate-y-6': !isAboutOpen
+              }"
+            >
               <div class="text-center p-4 bg-white dark:bg-gray-700 rounded-lg transition-colors duration-300">
                 <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">2+</div>
                 <div class="text-sm text-gray-600 dark:text-gray-300">Tahun Coding</div>
@@ -182,6 +212,52 @@
               <div class="text-center p-4 bg-white dark:bg-gray-700 rounded-lg transition-colors duration-300">
                 <div class="text-2xl font-bold text-red-600 dark:text-red-400">24/7</div>
                 <div class="text-sm text-gray-600 dark:text-gray-300">Ready to Code</div>
+              </div>
+            </div>
+
+            <!-- Download CV Button -->
+            <div
+              class="mt-8 text-center transition-all duration-700 ease-in-out"
+              :class="{
+                'opacity-100 translate-y-0': isAboutOpen,
+                'opacity-0 translate-y-4': !isAboutOpen
+              }"
+            >`
+              <button
+                @click="downloadCV"
+                :disabled="isDownloading"
+                class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none inline-flex items-center gap-3"
+              >
+                <!-- Loading Spinner -->
+                <div
+                  v-if="isDownloading"
+                  class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"
+                ></div>
+
+                <!-- Download Icon -->
+                <svg
+                  v-else
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+
+                <span>{{ isDownloading ? 'Mengunduh...' : 'Unduh CV' }}</span>
+              </button>
+
+              <!-- Download Feedback -->
+              <div
+                v-if="downloadFeedback"
+                class="mt-3 inline-block px-4 py-2 rounded-lg text-sm transition-all duration-300"
+                :class="{
+                  'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300': downloadSuccess,
+                  'bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300': !downloadSuccess
+                }"
+              >
+                {{ downloadFeedback }}
               </div>
             </div>
           </div>
@@ -201,6 +277,11 @@ defineOptions({
 const isAboutOpen = ref(false);
 const aboutSection = ref(null);
 
+// Download CV states
+const isDownloading = ref(false);
+const downloadFeedback = ref('');
+const downloadSuccess = ref(false);
+
 // 3D Tilt effect refs
 const tiltContainer = ref(null);
 const tiltImage = ref(null);
@@ -215,6 +296,52 @@ let rotatingInterval = null;
 
 const toggleAbout = () => {
   isAboutOpen.value = !isAboutOpen.value;
+};
+
+// Download CV function
+const downloadCV = async () => {
+  if (isDownloading.value) return;
+
+  try {
+    isDownloading.value = true;
+    downloadFeedback.value = '';
+
+    // Create a link element and trigger download
+    const link = document.createElement('a');
+    link.href = '/cv/CV-Agi-Muhammad-Tengku-Aqamaddin.pdf';
+    link.download = 'CV-Agi-Muhammad-Tengku-Aqamaddin.pdf';
+
+    // Append to body, click, and remove
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    // Simulate download delay for better UX
+    await new Promise(resolve => setTimeout(resolve, 1500));
+
+    // Show success feedback
+    downloadSuccess.value = true;
+    downloadFeedback.value = 'CV berhasil diunduh!';
+
+    // Clear feedback after 3 seconds
+    setTimeout(() => {
+      downloadFeedback.value = '';
+    }, 3000);
+
+  } catch (error) {
+    // Show error feedback
+    downloadSuccess.value = false;
+    downloadFeedback.value = 'Gagal mengunduh CV. Silakan coba lagi.';
+
+    console.error('Download error:', error);
+
+    // Clear feedback after 4 seconds
+    setTimeout(() => {
+      downloadFeedback.value = '';
+    }, 4000);
+  } finally {
+    isDownloading.value = false;
+  }
 };
 
 // Rotating text function
