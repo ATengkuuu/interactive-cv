@@ -45,6 +45,9 @@
           </div>
 
           <form @submit.prevent="handleSubmit" class="space-y-6">
+            <!-- Honeypot field for spam protection (hidden) -->
+            <input type="text" name="_gotcha" style="display:none" />
+
             <!-- Name Field -->
             <div>
               <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -131,57 +134,98 @@
 
           <!-- GitHub Contributions Widget -->
           <div class="mt-8 bg-gray-50 dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
-            <div class="flex items-center justify-between mb-4">
+            <div class="mb-4">
               <h4 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
                 <svg class="w-5 h-5 mr-2 text-purple-600 dark:text-purple-400" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
                 </svg>
                 GitHub Activity
               </h4>
-              <a
-                href="https://github.com/ATengkuuu"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-purple-600 hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300 text-sm font-medium transition-colors"
-              >
-                View Profile →
-              </a>
             </div>
 
-            <div class="flex items-center justify-between">
-              <div class="flex items-center space-x-6">
-                <div class="text-center">
-                  <div class="text-3xl font-bold text-green-600 dark:text-green-400">49</div>
-                  <div class="text-sm text-gray-600 dark:text-gray-400">Contributions</div>
+            <!-- Real GitHub Contribution Graph using GitHub README Stats -->
+            <div class="space-y-4">
+              <!-- Contribution Graph -->
+                <div class="flex justify-center">
+                <!-- Light mode -->
+                <img
+                  v-if="!isDarkMode"
+                  src="https://streak-stats.demolab.com/?user=ATengkuuu&theme=transparent&hide_border=true&stroke=6366f1&ring=06b6d4&fire=ef4444&sideNums=374151&sideLabels=374151&dates=6b7280"
+                  alt="GitHub Streak Stats"
+                  class="max-w-full h-auto rounded-lg"
+                  loading="lazy"
+                />
+                <!-- Dark mode - menggunakan theme yang kompatibel -->
+                <img
+                  v-else
+                  src="https://streak-stats.demolab.com/?user=ATengkuuu&theme=dark&hide_border=true&stroke=a855f7&ring=06b6d4&fire=ef4444&sideNums=e5e7eb&sideLabels=d1d5db&dates=9ca3af&background=1f2937"
+                  alt="GitHub Streak Stats"
+                  class="max-w-full h-auto rounded-lg"
+                  loading="lazy"
+                  @error="handleImageError"
+                />
+              </div>
+
+              <!-- Additional GitHub Stats -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="flex justify-center">
+                  <!-- Light mode -->
+                  <img
+                    v-if="!isDarkMode"
+                    src="https://github-readme-stats.vercel.app/api?username=ATengkuuu&show_icons=true&theme=transparent&hide_border=true&text_color=374151&icon_color=6366f1&title_color=1f2937"
+                    alt="GitHub Stats"
+                    class="max-w-full h-auto rounded-lg"
+                    loading="lazy"
+                    @error="handleImageError"
+                  />
+                  <!-- Dark mode -->
+                  <img
+                    v-else
+                    src="https://github-readme-stats.vercel.app/api?username=ATengkuuu&show_icons=true&theme=dark&hide_border=true&text_color=e5e7eb&icon_color=a855f7&title_color=f9fafb&bg_color=1f2937"
+                    alt="GitHub Stats"
+                    class="max-w-full h-auto rounded-lg"
+                    loading="lazy"
+                    @error="handleImageError"
+                  />
                 </div>
-                <div class="text-center">
-                  <div class="text-3xl font-bold text-blue-600 dark:text-blue-400">12</div>
-                  <div class="text-sm text-gray-600 dark:text-gray-400">Repositories</div>
-                </div>
-                <div class="text-center">
-                  <div class="text-3xl font-bold text-purple-600 dark:text-purple-400">2024</div>
-                  <div class="text-sm text-gray-600 dark:text-gray-400">This Year</div>
+                <div class="flex justify-center">
+                  <!-- Light mode -->
+                  <img
+                    v-if="!isDarkMode"
+                    src="https://github-readme-stats.vercel.app/api/top-langs/?username=ATengkuuu&layout=compact&theme=transparent&hide_border=true&text_color=374151&title_color=1f2937"
+                    alt="Top Languages"
+                    class="max-w-full h-auto rounded-lg"
+                    loading="lazy"
+                    @error="handleImageError"
+                  />
+                  <!-- Dark mode -->
+                  <img
+                    v-else
+                    src="https://github-readme-stats.vercel.app/api/top-langs/?username=ATengkuuu&layout=compact&theme=dark&hide_border=true&text_color=e5e7eb&title_color=f9fafb&bg_color=1f2937"
+                    alt="Top Languages"
+                    class="max-w-full h-auto rounded-lg"
+                    loading="lazy"
+                    @error="handleImageError"
+                  />
                 </div>
               </div>
 
-              <!-- GitHub Contribution Graph Placeholder -->
-              <div class="hidden sm:flex items-center space-x-1">
-                <div class="grid grid-cols-7 gap-1">
-                  <div class="w-3 h-3 bg-green-200 dark:bg-green-800 rounded-sm"></div>
-                  <div class="w-3 h-3 bg-green-300 dark:bg-green-700 rounded-sm"></div>
-                  <div class="w-3 h-3 bg-green-400 dark:bg-green-600 rounded-sm"></div>
-                  <div class="w-3 h-3 bg-green-500 dark:bg-green-500 rounded-sm"></div>
-                  <div class="w-3 h-3 bg-green-300 dark:bg-green-700 rounded-sm"></div>
-                  <div class="w-3 h-3 bg-green-200 dark:bg-green-800 rounded-sm"></div>
-                  <div class="w-3 h-3 bg-green-400 dark:bg-green-600 rounded-sm"></div>
-                  <div class="w-3 h-3 bg-green-500 dark:bg-green-500 rounded-sm"></div>
-                  <div class="w-3 h-3 bg-green-300 dark:bg-green-700 rounded-sm"></div>
-                  <div class="w-3 h-3 bg-green-200 dark:bg-green-800 rounded-sm"></div>
-                  <div class="w-3 h-3 bg-green-400 dark:bg-green-600 rounded-sm"></div>
-                  <div class="w-3 h-3 bg-green-300 dark:bg-green-700 rounded-sm"></div>
-                  <div class="w-3 h-3 bg-green-500 dark:bg-green-500 rounded-sm"></div>
-                  <div class="w-3 h-3 bg-green-200 dark:bg-green-800 rounded-sm"></div>
-                </div>
+              <!-- CTA to view full profile -->
+              <div class="text-center pt-4 border-t border-gray-200 dark:border-gray-600">
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                  Lihat aktivitas lengkap dan repositori saya
+                </p>
+                <a
+                  href="https://github.com/ATengkuuu"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center px-4 py-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-sm font-medium rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors space-x-2"
+                >
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                  </svg>
+                  <span>Visit GitHub Profile</span>
+                </a>
               </div>
             </div>
           </div>
@@ -213,6 +257,7 @@
                       src="https://avatars.githubusercontent.com/u/202240388?v=4"
                       alt="Agi Muhammad Tengku Aqamaddin"
                       class="w-full h-full rounded-full object-cover"
+                      loading="lazy"
                     />
                   </div>
                 </div>
@@ -227,17 +272,18 @@
                   </p>
                 </div>
 
-                <!-- Contact Icons -->
-                <div class="flex justify-center space-x-6 mb-6">
-                  <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
-                    <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                  </div>
-                  <div class="w-10 h-10 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center">
-                    <svg class="w-5 h-5 text-purple-600 dark:text-purple-400" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                    </svg>
+                <!-- Inspirational Quote -->
+                <div class="text-center mb-6 px-4">
+                  <div class="relative">
+                    <!-- Quote marks -->
+                    <div class="absolute -top-2 -left-2 text-4xl text-blue-500 dark:text-blue-400 opacity-30 font-serif">"</div>
+                    <blockquote class="text-sm italic text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
+                      Do not wait the time will never be 'just right'. Start where you stand, and work with whatever tools you may have.
+                    </blockquote>
+                    <cite class="text-xs font-semibold text-purple-600 dark:text-purple-400">
+                      — Napoleon Hill
+                    </cite>
+                    <div class="absolute -bottom-2 -right-2 text-4xl text-purple-500 dark:text-purple-400 opacity-30 font-serif">"</div>
                   </div>
                 </div>
 
@@ -252,7 +298,7 @@
           <!-- Contact Info -->
           <div class="bg-white dark:bg-gray-900 p-8 rounded-2xl shadow-lg">
             <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-              Informasi Kontak
+              Sosial Media
             </h3>
             <div class="space-y-4">
               <div class="flex items-center space-x-4">
@@ -263,12 +309,31 @@
                 </div>
                 <div>
                   <p class="text-sm text-gray-600 dark:text-gray-400">Email</p>
-                  <a
-                    href="mailto:tengkuagi@gmail.com"
-                    class="text-gray-900 dark:text-white font-medium hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
+                  <div class="flex items-center space-x-2">
+                    <a
+                      href="mailto:tengkuagi@gmail.com"
+                      class="text-gray-900 dark:text-white font-medium hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
+                      title="Klik untuk buka email client atau copy alamat email"
                     >
-                    tengkuagi@gmail.com
-                  </a>
+                      tengkuagi@gmail.com
+                    </a>
+                    <button
+                      @click="copyEmail"
+                      class="p-1 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                      title="Copy email address"
+                    >
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                      </svg>
+                    </button>
+                  </div>
+                  <!-- Notification for copy success -->
+                  <div
+                    v-if="emailCopied"
+                    class="mt-1 text-xs text-green-600 dark:text-green-400 font-medium animate-fade-in"
+                  >
+                    ✓ Email copied to clipboard!
+                  </div>
                 </div>
               </div>
 
@@ -338,12 +403,13 @@
                 <div>
                   <p class="text-sm text-gray-600 dark:text-gray-400">Discord</p>
                   <a
-                    href="https://discord.com/users/684634138640252957"
+                    href="discord://discord.com/users/684634138640252957"
                     target="_blank"
                     rel="noopener noreferrer"
                     class="text-gray-900 dark:text-white font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer"
+                    @click="handleDiscordClick"
                   >
-                    @ATengkuu
+                    @atengkuu
                   </a>
                 </div>
               </div>
@@ -392,6 +458,10 @@ const showCard = ref(false);
 const cardRef = ref(null);
 const sectionRef = ref(null);
 const isDesktop = ref(window.innerWidth >= 1024);
+const emailCopied = ref(false);
+
+// Dark mode detection for GitHub stats
+const isDarkMode = ref(false);
 
 // Intersection Observer
 let observer = null;
@@ -399,6 +469,12 @@ let observer = null;
 // Check if device is desktop
 const checkDevice = () => {
   isDesktop.value = window.innerWidth >= 1024; // lg breakpoint
+};
+
+// Check dark mode
+const checkDarkMode = () => {
+  // Check if dark class is present on html element
+  isDarkMode.value = document.documentElement.classList.contains('dark');
 };
 
 // Setup intersection observer
@@ -440,8 +516,27 @@ const handleSubmit = async () => {
       throw new Error('Format email tidak valid');
     }
 
-    // Simulate form submission (replace with actual submission logic)
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    // Send to Formspree
+    const response = await fetch('https://formspree.io/f/mjkrqdro', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: form.value.name,
+        email: form.value.email,
+        subject: form.value.subject,
+        message: form.value.message,
+        _replyto: form.value.email,
+        _subject: `Portfolio Contact: ${form.value.subject}`,
+        _gotcha: '', // Honeypot field for spam protection
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Gagal mengirim pesan. Silakan coba lagi.');
+    }
 
     // Show success message
     isSubmitted.value = true;
@@ -452,7 +547,8 @@ const handleSubmit = async () => {
     }, 3000);
 
   } catch (error) {
-    submitError.value = error.message;
+    console.error('Form submission error:', error);
+    submitError.value = error.message || 'Terjadi kesalahan saat mengirim pesan. Silakan coba lagi.';
   } finally {
     isSubmitting.value = false;
   }
@@ -470,11 +566,99 @@ const resetForm = () => {
   submitError.value = '';
 };
 
+// Copy email to clipboard
+const copyEmail = async () => {
+  const email = 'tengkuagi@gmail.com';
+
+  try {
+    await navigator.clipboard.writeText(email);
+    emailCopied.value = true;
+
+    // Hide notification after 2 seconds
+    setTimeout(() => {
+      emailCopied.value = false;
+    }, 2000);
+  } catch {
+    // Fallback for older browsers
+    const textArea = document.createElement('textarea');
+    textArea.value = email;
+    textArea.style.position = 'fixed';
+    textArea.style.opacity = '0';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+      document.execCommand('copy');
+      emailCopied.value = true;
+
+      setTimeout(() => {
+        emailCopied.value = false;
+      }, 2000);
+    } catch {
+      console.error('Could not copy email address');
+    }
+
+    document.body.removeChild(textArea);
+  }
+};
+
+// Handle Discord click with app fallback
+const handleDiscordClick = (event) => {
+  event.preventDefault();
+
+  const discordAppUrl = 'discord://discord.com/users/684634138640252957';
+  const discordWebUrl = 'https://discordapp.com/users/684634138640252957';
+
+  // Try to open Discord app first
+  const iframe = document.createElement('iframe');
+  iframe.style.display = 'none';
+  iframe.src = discordAppUrl;
+  document.body.appendChild(iframe);
+
+  // Fallback to web after a short delay if app doesn't open
+  setTimeout(() => {
+    document.body.removeChild(iframe);
+    window.open(discordWebUrl, '_blank', 'noopener,noreferrer');
+  }, 1000);
+
+  // For mobile devices, try direct protocol first
+  if (/Mobi|Android/i.test(navigator.userAgent)) {
+    window.location.href = discordAppUrl;
+    // Fallback for mobile
+    setTimeout(() => {
+      window.open(discordWebUrl, '_blank', 'noopener,noreferrer');
+    }, 2000);
+  }
+};
+
+// Handle GitHub image errors
+const handleImageError = (event) => {
+  console.log('GitHub widget failed to load:', event.target.src);
+  // Hide the image if it fails to load
+  event.target.style.display = 'none';
+};
+
 // Lifecycle hooks
 onMounted(() => {
   checkDevice();
+  checkDarkMode(); // Check initial dark mode state
   setupIntersectionObserver();
+
   window.addEventListener('resize', checkDevice);
+
+  // Watch for dark mode changes
+  const darkModeObserver = new MutationObserver(() => {
+    checkDarkMode();
+  });
+
+  darkModeObserver.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['class']
+  });
+
+  // Store observer for cleanup
+  window._darkModeObserver = darkModeObserver;
 });
 
 onUnmounted(() => {
@@ -482,6 +666,12 @@ onUnmounted(() => {
     observer.disconnect();
   }
   window.removeEventListener('resize', checkDevice);
+
+  // Clean up dark mode observer
+  if (window._darkModeObserver) {
+    window._darkModeObserver.disconnect();
+    delete window._darkModeObserver;
+  }
 });
 </script>
 
@@ -496,8 +686,17 @@ onUnmounted(() => {
   50% { transform: translateY(-10px); }
 }
 
+@keyframes fade-in {
+  0% { opacity: 0; transform: translateY(-5px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
 .animate-float {
   animation: float 3s ease-in-out infinite;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
 }
 
 /* Smooth transitions */

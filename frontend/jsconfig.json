@@ -2,7 +2,19 @@
   "compilerOptions": {
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "baseUrl": ".",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true
   },
-  "exclude": ["node_modules", "dist"]
+  "include": [
+    "src/**/*",
+    "*.vue"
+  ],
+  "exclude": [
+    "node_modules", 
+    "dist",
+    "**/*.d.ts"
+  ]
 }
