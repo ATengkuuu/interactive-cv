@@ -146,20 +146,21 @@
             <!-- Real GitHub Contribution Graph using GitHub README Stats -->
             <div class="space-y-4">
               <!-- Contribution Graph -->
-                <div class="flex justify-center">
+              <div class="flex justify-center">
                 <!-- Light mode -->
                 <img
                   v-if="!isDarkMode"
-                  src="https://streak-stats.demolab.com/?user=ATengkuuu&theme=transparent&hide_border=true&stroke=6366f1&ring=06b6d4&fire=ef4444&sideNums=374151&sideLabels=374151&dates=6b7280"
+                  :src="`https://github-readme-streak-stats.herokuapp.com/?user=${personalInfo?.github || 'ATengkuuu'}&theme=default&hide_border=true&stroke=6366f1&ring=06b6d4&fire=ef4444&currStreakNum=1f2937&sideNums=374151&sideLabels=374151&dates=6b7280&background=ffffff`"
                   alt="GitHub Streak Stats"
                   class="max-w-full h-auto rounded-lg"
                   loading="lazy"
+                  @error="handleImageError"
                 />
-                <!-- Dark mode - menggunakan theme yang kompatibel -->
+                <!-- Dark mode -->
                 <img
                   v-else
-                  src="https://streak-stats.demolab.com/?user=ATengkuuu&theme=dark&hide_border=true&stroke=a855f7&ring=06b6d4&fire=ef4444&sideNums=e5e7eb&sideLabels=d1d5db&dates=9ca3af&background=1f2937"
-                  alt="GitHub Streak Stats"
+                  :src="`https://github-readme-streak-stats.herokuapp.com/?user=ATengkuuu&theme=dark&hide_border=true&background=1f2937&stroke=8b5cf6&ring=06b6d4&fire=ef4444&currStreakNum=f9fafb&sideNums=e5e7eb&sideLabels=d1d5db&dates=9ca3af&border=374151`"
+                  alt="GitHub Streak Stats Dark"
                   class="max-w-full h-auto rounded-lg"
                   loading="lazy"
                   @error="handleImageError"
@@ -172,7 +173,7 @@
                   <!-- Light mode -->
                   <img
                     v-if="!isDarkMode"
-                    src="https://github-readme-stats.vercel.app/api?username=ATengkuuu&show_icons=true&theme=transparent&hide_border=true&text_color=374151&icon_color=6366f1&title_color=1f2937"
+                    :src="`https://github-readme-stats.vercel.app/api?username=${personalInfo?.github || 'ATengkuuu'}&show_icons=true&theme=default&hide_border=true&text_color=374151&icon_color=6366f1&title_color=1f2937&bg_color=ffffff&cache_seconds=86400`"
                     alt="GitHub Stats"
                     class="max-w-full h-auto rounded-lg"
                     loading="lazy"
@@ -181,7 +182,7 @@
                   <!-- Dark mode -->
                   <img
                     v-else
-                    src="https://github-readme-stats.vercel.app/api?username=ATengkuuu&show_icons=true&theme=dark&hide_border=true&text_color=e5e7eb&icon_color=a855f7&title_color=f9fafb&bg_color=1f2937"
+                    :src="`https://github-readme-stats.vercel.app/api?username=${personalInfo?.github || 'ATengkuuu'}&show_icons=true&theme=github_dark&hide_border=true&text_color=e5e7eb&icon_color=a855f7&title_color=f9fafb&bg_color=1f2937&cache_seconds=86400`"
                     alt="GitHub Stats"
                     class="max-w-full h-auto rounded-lg"
                     loading="lazy"
@@ -192,7 +193,7 @@
                   <!-- Light mode -->
                   <img
                     v-if="!isDarkMode"
-                    src="https://github-readme-stats.vercel.app/api/top-langs/?username=ATengkuuu&layout=compact&theme=transparent&hide_border=true&text_color=374151&title_color=1f2937"
+                    :src="`https://github-readme-stats.vercel.app/api/top-langs/?username=${personalInfo?.github || 'ATengkuuu'}&layout=compact&theme=default&hide_border=true&text_color=374151&title_color=1f2937&bg_color=ffffff&cache_seconds=86400`"
                     alt="Top Languages"
                     class="max-w-full h-auto rounded-lg"
                     loading="lazy"
@@ -201,7 +202,7 @@
                   <!-- Dark mode -->
                   <img
                     v-else
-                    src="https://github-readme-stats.vercel.app/api/top-langs/?username=ATengkuuu&layout=compact&theme=dark&hide_border=true&text_color=e5e7eb&title_color=f9fafb&bg_color=1f2937"
+                    :src="`https://github-readme-stats.vercel.app/api/top-langs/?username=${personalInfo?.github || 'ATengkuuu'}&layout=compact&theme=github_dark&hide_border=true&text_color=e5e7eb&title_color=f9fafb&bg_color=1f2937&cache_seconds=86400`"
                     alt="Top Languages"
                     class="max-w-full h-auto rounded-lg"
                     loading="lazy"
@@ -216,7 +217,7 @@
                   Lihat aktivitas lengkap dan repositori saya
                 </p>
                 <a
-                  href="https://github.com/ATengkuuu"
+                  :href="personalInfo?.contact?.github || 'https://github.com/ATengkuuu'"
                   target="_blank"
                   rel="noopener noreferrer"
                   class="inline-flex items-center px-4 py-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-sm font-medium rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors space-x-2"
@@ -265,10 +266,10 @@
                 <!-- Name and Title -->
                 <div class="text-center mb-6">
                   <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-1">
-                    Agi Muhammad Tengku Aqamaddin
+                    {{ personalInfo?.name || 'Agi Muhammad Tengku Aqamaddin' }}
                   </h3>
                   <p class="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
-                    FRONT-END ENGINEER
+                    {{ personalInfo?.title || 'FRONT-END ENGINEER' }}
                   </p>
                 </div>
 
@@ -311,11 +312,11 @@
                   <p class="text-sm text-gray-600 dark:text-gray-400">Email</p>
                   <div class="flex items-center space-x-2">
                     <a
-                      href="mailto:tengkuagi@gmail.com"
+                      :href="`mailto:${personalInfo?.contact?.email || 'tengkuagi@gmail.com'}`"
                       class="text-gray-900 dark:text-white font-medium hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
                       title="Klik untuk buka email client atau copy alamat email"
                     >
-                      tengkuagi@gmail.com
+                      {{ personalInfo?.contact?.email || 'tengkuagi@gmail.com' }}
                     </a>
                     <button
                       @click="copyEmail"
@@ -346,12 +347,12 @@
                 <div>
                   <p class="text-sm text-gray-600 dark:text-gray-400">GitHub</p>
                   <a
-                    href="https://github.com/ATengkuuu"
+                    :href="personalInfo?.contact?.github || 'https://github.com/ATengkuuu'"
                     target="_blank"
                     rel="noopener noreferrer"
                     class="text-gray-900 dark:text-white font-medium hover:text-purple-600 dark:hover:text-purple-400 transition-colors cursor-pointer"
                   >
-                    github.com/ATengkuuu
+                    {{ (personalInfo?.contact?.github || 'https://github.com/ATengkuuu').replace('https://', '') }}
                   </a>
                 </div>
               </div>
@@ -365,12 +366,12 @@
                 <div>
                   <p class="text-sm text-gray-600 dark:text-gray-400">WhatsApp</p>
                   <a
-                    href="https://wa.me/6289603349372"
+                    :href="personalInfo?.contact?.whatsapp || 'https://wa.me/6289603349372'"
                     target="_blank"
                     rel="noopener noreferrer"
                     class="text-gray-900 dark:text-white font-medium hover:text-green-600 dark:hover:text-green-400 transition-colors cursor-pointer"
                   >
-                    +62 896-0334-9372
+                    {{ personalInfo?.contact?.phone || '+62 896-0334-9372' }}
                   </a>
                 </div>
               </div>
@@ -384,12 +385,12 @@
                 <div>
                   <p class="text-sm text-gray-600 dark:text-gray-400">Instagram</p>
                   <a
-                    href="https://instagram.com/a.tengkuu"
+                    :href="personalInfo?.contact?.instagram || 'https://instagram.com/a.tengkuu'"
                     target="_blank"
                     rel="noopener noreferrer"
                     class="text-gray-900 dark:text-white font-medium hover:text-pink-600 dark:hover:text-pink-400 transition-colors cursor-pointer"
                   >
-                    @a.tengkuu
+                    {{ personalInfo?.contact?.instagramHandle || '@a.tengkuu' }}
                   </a>
                 </div>
               </div>
@@ -403,13 +404,13 @@
                 <div>
                   <p class="text-sm text-gray-600 dark:text-gray-400">Discord</p>
                   <a
-                    href="discord://discord.com/users/684634138640252957"
+                    :href="`discord://discord.com/users/${personalInfo?.contact?.discord?.id || '684634138640252957'}`"
                     target="_blank"
                     rel="noopener noreferrer"
                     class="text-gray-900 dark:text-white font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer"
                     @click="handleDiscordClick"
                   >
-                    @atengkuu
+                    {{ personalInfo?.contact?.discord?.username || '@atengkuu' }}
                   </a>
                 </div>
               </div>
@@ -462,6 +463,49 @@ const emailCopied = ref(false);
 
 // Dark mode detection for GitHub stats
 const isDarkMode = ref(false);
+
+// Personal info from API
+const personalInfo = ref(null)
+const personalLoading = ref(true)
+
+// Fetch personal info from backend API
+const fetchPersonalInfo = async () => {
+  try {
+    personalLoading.value = true
+    const response = await fetch('http://localhost:5000/api/personal')
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    const result = await response.json()
+
+    if (result.success && result.data) {
+      personalInfo.value = result.data
+    } else {
+      throw new Error('Invalid response format')
+    }
+  } catch (err) {
+    console.error('Failed to fetch personal info:', err)
+
+    // Fallback data if API fails
+    personalInfo.value = {
+      name: 'Agi Muhammad Tengku Aqamaddin',
+      contact: {
+        email: 'tengkuagi@gmail.com',
+        github: 'https://github.com/ATengkuuu',
+        instagram: 'https://instagram.com/a.tengkuu',
+        whatsapp: 'https://wa.me/6289603349372',
+        discord: {
+          username: '@atengkuu',
+          id: '684634138640252957'
+        }
+      }
+    }
+  } finally {
+    personalLoading.value = false
+  }
+}
 
 // Intersection Observer
 let observer = null;
@@ -568,7 +612,7 @@ const resetForm = () => {
 
 // Copy email to clipboard
 const copyEmail = async () => {
-  const email = 'tengkuagi@gmail.com';
+  const email = personalInfo.value?.contact?.email || 'tengkuagi@gmail.com';
 
   try {
     await navigator.clipboard.writeText(email);
@@ -607,8 +651,9 @@ const copyEmail = async () => {
 const handleDiscordClick = (event) => {
   event.preventDefault();
 
-  const discordAppUrl = 'discord://discord.com/users/684634138640252957';
-  const discordWebUrl = 'https://discordapp.com/users/684634138640252957';
+  const discordId = personalInfo.value?.contact?.discord?.id || '684634138640252957';
+  const discordAppUrl = `discord://discord.com/users/${discordId}`;
+  const discordWebUrl = `https://discordapp.com/users/${discordId}`;
 
   // Try to open Discord app first
   const iframe = document.createElement('iframe');
@@ -635,12 +680,34 @@ const handleDiscordClick = (event) => {
 // Handle GitHub image errors
 const handleImageError = (event) => {
   console.log('GitHub widget failed to load:', event.target.src);
-  // Hide the image if it fails to load
-  event.target.style.display = 'none';
+
+  // Create fallback content
+  const img = event.target;
+  const container = img.parentElement;
+
+  // Hide the broken image
+  img.style.display = 'none';
+
+  // Create fallback div if it doesn't exist
+  if (!container.querySelector('.github-fallback')) {
+    const fallback = document.createElement('div');
+    fallback.className = 'github-fallback bg-gray-100 dark:bg-gray-700 rounded-lg p-4 text-center text-gray-600 dark:text-gray-300 text-sm';
+    fallback.innerHTML = `
+      <svg class="w-8 h-8 mx-auto mb-2 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+      </svg>
+      <p>GitHub stats temporarily unavailable</p>
+      <p class="text-xs mt-1">Please check back later</p>
+    `;
+    container.appendChild(fallback);
+  }
 };
 
 // Lifecycle hooks
 onMounted(() => {
+  // Fetch personal info
+  fetchPersonalInfo();
+
   checkDevice();
   checkDarkMode(); // Check initial dark mode state
   setupIntersectionObserver();
@@ -745,5 +812,42 @@ textarea::-webkit-scrollbar-thumb:hover {
 
 .dark textarea::-webkit-scrollbar-thumb:hover {
   background: #9CA3AF;
+}
+
+/* GitHub widget fallback styles */
+.github-fallback {
+  min-height: 195px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Responsive GitHub widgets */
+@media (max-width: 640px) {
+  .github-fallback {
+    min-height: 150px;
+  }
+}
+
+/* Loading animation for GitHub widgets */
+.github-widget-loading {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+.dark .github-widget-loading {
+  background: linear-gradient(90deg, #374151 25%, #4b5563 50%, #374151 75%);
+  background-size: 200% 100%;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 </style>

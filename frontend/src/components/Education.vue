@@ -1,13 +1,46 @@
 <script setup>
+import { ref, onMounted } from 'vue'
+
 defineOptions({ name: 'EducationSection' });
 import SectionTitle from './SectionTitle.vue';
 
-// Data ini akan kita pindah ke backend nanti
-const educationHistory = [
-  { id: 1, period: '2023 - Sekarang', institution: 'Universitas Amikom Yogyakarta', major: 'S1 - Informatika' },
-  { id: 2, period: '2020 - 2023', institution: 'Madrasah Aliyah Negeri Paser', major: 'MIPA' },
-  { id: 3, period: '2017 - 2020', institution: 'Madrasah Tsanawiyah Negeri 3 Paser', major: 'Umum' }
-];
+// Education data from API
+const educationHistory = ref([])
+const isLoading = ref(true)
+const error = ref(null)
+
+// Fetch education from backend API
+const fetchEducation = async () => {
+  try {
+    isLoading.value = true
+    const response = await fetch('http://localhost:5000/api/education')
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    const result = await response.json()
+
+    if (result.success && result.data) {
+      educationHistory.value = result.data
+    } else {
+      throw new Error('Invalid response format')
+    }
+  } catch (err) {
+    console.error('Failed to fetch education:', err)
+    error.value = err.message
+
+    // Fallback to empty array if API fails
+    educationHistory.value = []
+  } finally {
+    isLoading.value = false
+  }
+}
+
+// Load education when component mounts
+onMounted(() => {
+  fetchEducation()
+})
 </script>
 <template>
   <section id="pendidikan" class="py-5 bg-white dark:bg-gray-900 transition-colors duration-300">
@@ -17,7 +50,30 @@ const educationHistory = [
         <SectionTitle title="Riwayat Pendidikan" />
       </div>
 
-      <div class="relative">
+      <!-- Loading State -->
+      <div v-if="isLoading" class="flex justify-center items-center min-h-[300px]">
+        <div class="text-center">
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p class="text-gray-600 dark:text-gray-400">Memuat riwayat pendidikan...</p>
+        </div>
+      </div>
+
+      <!-- Error State -->
+      <div v-else-if="error" class="flex justify-center items-center min-h-[300px]">
+        <div class="text-center">
+          <div class="text-red-500 text-5xl mb-4">⚠️</div>
+          <p class="text-gray-600 dark:text-gray-400 mb-4">Gagal memuat data pendidikan</p>
+          <button
+            @click="fetchEducation"
+            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
+          >
+            Coba Lagi
+          </button>
+        </div>
+      </div>
+
+      <!-- Education Timeline -->
+      <div v-else class="relative">
         <!-- Animated Timeline Line -->
         <div
           class="absolute h-full border-r-2 border-gray-300 dark:border-gray-600 transition-colors duration-300 animate-fade-in"

@@ -3,7 +3,30 @@
     <div class="container mx-auto px-4 sm:px-6">
       <SectionTitle title="Keahlian & Teknologi" />
 
-      <div ref="skillContainer" class="flex justify-center items-center min-h-[400px] sm:min-h-[500px] md:min-h-[600px] relative">
+      <!-- Loading State -->
+      <div v-if="isLoading" class="flex justify-center items-center min-h-[400px]">
+        <div class="text-center">
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p class="text-gray-600 dark:text-gray-400">Memuat data skills...</p>
+        </div>
+      </div>
+
+      <!-- Error State -->
+      <div v-else-if="error" class="flex justify-center items-center min-h-[400px]">
+        <div class="text-center">
+          <div class="text-red-500 text-5xl mb-4">⚠️</div>
+          <p class="text-gray-600 dark:text-gray-400 mb-4">Gagal memuat data skills</p>
+          <button
+            @click="fetchSkills"
+            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
+          >
+            Coba Lagi
+          </button>
+        </div>
+      </div>
+
+      <!-- Skills Content -->
+      <div v-else ref="skillContainer" class="flex justify-center items-center min-h-[400px] sm:min-h-[500px] md:min-h-[600px] relative">
         <!-- Connection Lines SVG -->
         <svg
           class="absolute inset-0 w-full h-full pointer-events-none z-0"
@@ -237,85 +260,53 @@ const rightColumn = ref(null)
 const ambientDots = ref([])
 const ambientInterval = ref(null)
 
-// Skills data with official icons
-const skillsData = [
-  {
-    name: 'Vue.js',
-    level: 'Mahir',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vuejs/vuejs-original.svg',
-    iconColor: 'text-green-500',
-    path: ''
-  },
-  {
-    name: 'JavaScript',
-    level: 'Mahir',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg',
-    iconColor: 'text-yellow-500',
-    path: ''
-  },
-  {
-    name: 'TypeScript',
-    level: 'Menengah',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg',
-    iconColor: 'text-blue-500',
-    path: ''
-  },
-  {
-    name: 'React',
-    level: 'Menengah',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg',
-    iconColor: 'text-blue-400',
-    path: ''
-  },
-  {
-    name: 'Node.js',
-    level: 'Menengah',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg',
-    iconColor: 'text-green-600',
-    path: ''
-  },
-  {
-    name: 'CSS3',
-    level: 'Mahir',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-original.svg',
-    iconColor: 'text-blue-600',
-    path: ''
-  },
-  {
-    name: 'HTML5',
-    level: 'Mahir',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg',
-    iconColor: 'text-orange-500',
-    path: ''
-  },
-  {
-    name: 'Git',
-    level: 'Mahir',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg',
-    iconColor: 'text-red-500',
-    path: ''
-  },
-  {
-    name: 'Tailwind',
-    level: 'Mahir',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg',
-    iconColor: 'text-cyan-500',
-    path: ''
-  },
-  {
-    name: 'MySQL',
-    level: 'Menengah',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg',
-    iconColor: 'text-blue-700',
-    path: ''
-  }
-]
+// Skills data from API
+const skillsData = ref([])
+const isLoading = ref(true)
+const error = ref(null)
 
-const skillsWithIcons = ref(skillsData)
+// Fetch skills from backend API
+const fetchSkills = async () => {
+  try {
+    isLoading.value = true
+    const response = await fetch('http://localhost:5000/api/skills')
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    const result = await response.json()
+
+    if (result.success && result.data) {
+      skillsData.value = result.data
+    } else {
+      throw new Error('Invalid response format')
+    }
+  } catch (err) {
+    console.error('Failed to fetch skills:', err)
+    error.value = err.message
+
+    // Fallback to empty array if API fails
+    skillsData.value = []
+  } finally {
+    isLoading.value = false
+  }
+}
+
+const skillsWithIcons = ref([])
 
 // Split skills into left and right columns
-const leftSkills = ref(skillsWithIcons.value.slice(0, 5))
-const rightSkills = ref(skillsWithIcons.value.slice(5, 10))
+const leftSkills = ref([])
+const rightSkills = ref([])
+
+// Update skills data when fetched
+const updateSkillsData = () => {
+  if (skillsData.value.length > 0) {
+    skillsWithIcons.value = skillsData.value
+    leftSkills.value = skillsData.value.slice(0, 5)
+    rightSkills.value = skillsData.value.slice(5, 10)
+  }
+}
 
 // Icon error handling
 const handleIconError = (event, skillName) => {
@@ -326,7 +317,7 @@ const handleIconError = (event, skillName) => {
 
 // Preload icons for better performance
 const preloadIcons = () => {
-  skillsData.forEach(skill => {
+  skillsData.value.forEach(skill => {
     const img = new Image()
     img.src = skill.icon
   })
@@ -467,7 +458,13 @@ const updatePaths = () => {
   })
 }
 
-onMounted(() => {
+onMounted(async () => {
+  // Fetch skills data from API
+  await fetchSkills()
+
+  // Update skills data structure
+  updateSkillsData()
+
   // Preload icons for better performance
   preloadIcons()
 

@@ -24,8 +24,8 @@
             <!-- Background Text Name -->
             <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-0">
               <div class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-gray-500 dark:text-gray-500 opacity-40 leading-tight text-center select-none transition-colors duration-300 whitespace-nowrap">
-                <div class="tracking-wider">AGI MUHAMMAD</div>
-                <div class="tracking-wider">TENGKU AQAMADDIN</div>
+                <div class="tracking-wider">{{ personalInfo?.name?.toUpperCase() || 'AGI MUHAMMAD' }}</div>
+                <div class="tracking-wider">{{ personalInfo?.name?.split(' ').slice(-2).join(' ').toUpperCase() || 'TENGKU AQAMADDIN' }}</div>
               </div>
             </div>
 
@@ -35,8 +35,8 @@
               style="transform-style: preserve-3d;"
             >
               <img
-                src="https://avatars.githubusercontent.com/u/202240388?v=4"
-                alt="Foto Profil Agi Muhammad Tengku Aqamaddin"
+                :src="personalInfo?.avatar || 'https://avatars.githubusercontent.com/u/202240388?v=4'"
+                :alt="`Foto Profil ${personalInfo?.name || 'Agi Muhammad Tengku Aqamaddin'}`"
                 class="absolute top-0 left-0 w-full h-full rounded-xl object-cover shadow-2xl border-2 sm:border-4 border-white dark:border-gray-700 transition-colors duration-300"
                 style="transform: translateZ(0);"
               >
@@ -123,11 +123,11 @@
                   Informasi Personal
                 </h3>
                 <div class="space-y-2 text-gray-600 dark:text-gray-300">
-                  <p><span class="font-medium">Nama:</span> Agi Muhammad Tengku Aqamaddin</p>
-                  <p><span class="font-medium">Umur:</span> 21 Tahun</p>
-                  <p><span class="font-medium">Lokasi:</span> Yogyakarta, Indonesia</p>
-                  <p><span class="font-medium">Status:</span> Mahasiswa Aktif</p>
-                  <p><span class="font-medium">Email:</span> tengkuagi@gmail.com</p>
+                  <p><span class="font-medium">Nama:</span> {{ personalInfo?.name || 'Agi Muhammad Tengku Aqamaddin' }}</p>
+                  <p><span class="font-medium">Umur:</span> {{ personalInfo?.age || '21 Tahun' }}</p>
+                  <p><span class="font-medium">Lokasi:</span> {{ personalInfo?.location || 'Yogyakarta, Indonesia' }}</p>
+                  <p><span class="font-medium">Status:</span> {{ personalInfo?.title || 'Mahasiswa Aktif' }}</p>
+                  <p><span class="font-medium">Email:</span> {{ personalInfo?.contact?.email || 'tengkuagi@gmail.com' }}</p>
                 </div>
               </div>
 
@@ -143,17 +143,8 @@
                   Tentang Saya
                 </h3>
                 <div class="text-gray-600 dark:text-gray-300 space-y-3">
-                  <p>
-                    Saya adalah mahasiswa Teknik Informatika yang bersemangat dalam pengembangan web dan desain antarmuka. Serta sedang menekuni dunia pengembangan web dan mobile application.
-                  </p>
-                  <p>
-                    Meskipun masih dalam tahap belajar, saya memiliki ketertarikan besar pada UI/UX Design, Frontend, dan Backend Development.
-                  </p>
-                  <p>
-                    Saya senang mencoba teknologi baru, membangun project kecil, dan terus mengasah kemampuan programming saya.
-                  </p>
-                  <p>
-                    Terbuka untuk kolaborasi, belajar dari pengalaman, dan berkontribusi dalam pengembangan aplikasi yang bermanfaat.
+                  <p v-for="(desc, index) in (personalInfo?.about?.description || defaultDescription)" :key="index">
+                    {{ desc }}
                   </p>
                 </div>
               </div>
@@ -171,20 +162,13 @@
                 Minat & Hobi
               </h3>
               <div class="flex flex-wrap gap-3">
-                <span class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm font-medium transition-colors duration-300">
-                  💻 Programming
-                </span>
-                <span class="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-3 py-1 rounded-full text-sm font-medium transition-colors duration-300">
-                  🎨 UI/UX Design
-                </span>
-                <span class="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 px-3 py-1 rounded-full text-sm font-medium transition-colors duration-300">
-                  📱 Mobile Development
-                </span>
-                <span class="bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 px-3 py-1 rounded-full text-sm font-medium transition-colors duration-300">
-                  🌐 Web Development
-                </span>
-                <span class="bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 px-3 py-1 rounded-full text-sm font-medium transition-colors duration-300">
-                  📚 Continuous Learning
+                <span
+                  v-for="interest in (personalInfo?.about?.interests || defaultInterests)"
+                  :key="interest"
+                  class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm font-medium transition-colors duration-300"
+                  :class="getInterestColorClass(interest)"
+                >
+                  {{ interest }}
                 </span>
               </div>
             </div>
@@ -277,10 +261,81 @@ defineOptions({
 const isAboutOpen = ref(false);
 const aboutSection = ref(null);
 
-// Download CV states
-const isDownloading = ref(false);
-const downloadFeedback = ref('');
-const downloadSuccess = ref(false);
+// Personal info from API
+const personalInfo = ref(null)
+const personalLoading = ref(true)
+
+// Default fallback data
+const defaultDescription = [
+  'Saya adalah mahasiswa Teknik Informatika yang bersemangat dalam pengembangan web dan desain antarmuka. Serta sedang menekuni dunia pengembangan web dan mobile application.',
+  'Meskipun masih dalam tahap belajar, saya memiliki ketertarikan besar pada UI/UX Design, Frontend, dan Backend Development.',
+  'Saya senang mencoba teknologi baru, membangun project kecil, dan terus mengasah kemampuan programming saya.',
+  'Terbuka untuk kolaborasi, belajar dari pengalaman, dan berkontribusi dalam pengembangan aplikasi yang bermanfaat.'
+]
+
+const defaultInterests = [
+  '💻 Programming',
+  '🎨 UI/UX Design',
+  '📚 Continuous Learning',
+  '🔍 Problem Solving',
+  '🌐 Web Development',
+  '📱 Mobile Development'
+]
+
+// Fetch personal info from backend API
+const fetchPersonalInfo = async () => {
+  try {
+    personalLoading.value = true
+    const response = await fetch('http://localhost:5000/api/personal')
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    const result = await response.json()
+
+    if (result.success && result.data) {
+      personalInfo.value = result.data
+    } else {
+      throw new Error('Invalid response format')
+    }
+  } catch (err) {
+    console.error('Failed to fetch personal info:', err)
+
+    // Fallback data if API fails
+    personalInfo.value = {
+      name: 'Agi Muhammad Tengku Aqamaddin',
+      title: 'Front-End Engineer',
+      location: 'Yogyakarta, Indonesia',
+      age: '21 Tahun',
+      avatar: 'https://avatars.githubusercontent.com/u/202240388?v=4',
+      about: {
+        description: defaultDescription,
+        interests: defaultInterests
+      },
+      contact: {
+        email: 'tengkuagi@gmail.com'
+      }
+    }
+  } finally {
+    personalLoading.value = false
+  }
+}
+
+// Get color class for interests
+const getInterestColorClass = (interest) => {
+  const colors = [
+    'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200',
+    'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200',
+    'bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200',
+    'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200',
+    'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200',
+    'bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200'
+  ]
+
+  const index = Math.abs(interest.split('').reduce((a, b) => a + b.charCodeAt(0), 0)) % colors.length
+  return colors[index]
+}
 
 // 3D Tilt effect refs
 const tiltContainer = ref(null);
@@ -442,6 +497,9 @@ onMounted(() => {
   setTimeout(() => {
     startRotatingText();
   }, 1000);
+
+  // Fetch personal info on component mount
+  fetchPersonalInfo();
 });
 
 onUnmounted(() => {
@@ -451,4 +509,9 @@ onUnmounted(() => {
     clearInterval(rotatingInterval);
   }
 });
+
+// Download CV states
+const isDownloading = ref(false)
+const downloadFeedback = ref('')
+const downloadSuccess = ref(false)
 </script>

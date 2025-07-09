@@ -1,28 +1,47 @@
 <script setup>
+import { ref, onMounted } from 'vue'
+
 defineOptions({ name: 'PortfolioProjects' });
 
 import SectionTitle from './SectionTitle.vue';
 
-const projects = [
-  {
-    id: 1,
-    title: 'Aplikasi Mental Health Sobat',
-    image: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=500&h=300&fit=crop',
-    description: 'Platform kesehatan mental yang membantu pengguna untuk konsultasi dengan psikolog, tracking mood harian, dan akses ke artikel-artikel kesehatan mental. Dilengkapi dengan fitur chat real-time dan reminder untuk self-care.',
-    tech: ['React Native', 'Firebase', 'Node.js', 'Socket.io', 'MongoDB'],
-    link: '#',
-    status: 'coming-soon'
-  },
-  {
-    id: 2,
-    title: 'Website Barbershop CutsProject',
-    image: 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=500&h=300&fit=crop',
-    description: 'Website modern untuk barbershop dengan sistem booking online, galeri potong rambut, profil barber, dan manajemen jadwal. Dilengkapi dengan fitur pembayaran digital dan review pelanggan.',
-    tech: ['Vue.js', 'Express.js', 'PostgreSQL', 'Stripe', 'Socket.io'],
-    link: '#',
-    status: 'on-progress'
+// Projects data from API
+const projects = ref([])
+const isLoading = ref(true)
+const error = ref(null)
+
+// Fetch projects from backend API
+const fetchProjects = async () => {
+  try {
+    isLoading.value = true
+    const response = await fetch('http://localhost:5000/api/projects')
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    const result = await response.json()
+
+    if (result.success && result.data) {
+      projects.value = result.data
+    } else {
+      throw new Error('Invalid response format')
+    }
+  } catch (err) {
+    console.error('Failed to fetch projects:', err)
+    error.value = err.message
+
+    // Fallback to empty array if API fails
+    projects.value = []
+  } finally {
+    isLoading.value = false
   }
-];
+}
+
+// Load projects when component mounts
+onMounted(() => {
+  fetchProjects()
+})
 
 // Error handling untuk images
 const handleImageError = (event) => {
@@ -36,7 +55,30 @@ const handleImageError = (event) => {
     <div class="container mx-auto px-6">
       <SectionTitle title="Proyek Unggulan" />
 
-      <div class="grid md:grid-cols-2 gap-12">
+      <!-- Loading State -->
+      <div v-if="isLoading" class="flex justify-center items-center min-h-[400px]">
+        <div class="text-center">
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p class="text-gray-600 dark:text-gray-400">Memuat data proyek...</p>
+        </div>
+      </div>
+
+      <!-- Error State -->
+      <div v-else-if="error" class="flex justify-center items-center min-h-[400px]">
+        <div class="text-center">
+          <div class="text-red-500 text-5xl mb-4">⚠️</div>
+          <p class="text-gray-600 dark:text-gray-400 mb-4">Gagal memuat data proyek</p>
+          <button
+            @click="fetchProjects"
+            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
+          >
+            Coba Lagi
+          </button>
+        </div>
+      </div>
+
+      <!-- Projects Grid -->
+      <div v-else class="grid md:grid-cols-2 gap-12">
         <div
           v-for="project in projects"
           :key="project.id"
