@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import axios from 'axios'
 
 defineOptions({ name: 'PortfolioProjects' });
 
@@ -10,28 +11,21 @@ const projects = ref([])
 const isLoading = ref(true)
 const error = ref(null)
 
+const API_URL = `${import.meta.env.VITE_API_URL}/api/projects`
+
 // Fetch projects from backend API
 const fetchProjects = async () => {
   try {
     isLoading.value = true
-    const response = await fetch('http://localhost:5000/api/projects')
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
-    }
-
-    const result = await response.json()
-
-    if (result.success && result.data) {
-      projects.value = result.data
+    const result = await axios.get(API_URL)
+    if (result.data.success && result.data.data) {
+      projects.value = result.data.data
     } else {
       throw new Error('Invalid response format')
     }
   } catch (err) {
-    console.error('Failed to fetch projects:', err)
+    console.error('Gagal mengambil data proyek:', err)
     error.value = err.message
-
-    // Fallback to empty array if API fails
     projects.value = []
   } finally {
     isLoading.value = false

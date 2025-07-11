@@ -1,36 +1,30 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import axios from 'axios'
+import SectionTitle from './SectionTitle.vue'
 
 defineOptions({ name: 'EducationSection' });
-import SectionTitle from './SectionTitle.vue';
 
 // Education data from API
 const educationHistory = ref([])
 const isLoading = ref(true)
 const error = ref(null)
 
+const API_URL = `${import.meta.env.VITE_API_URL}/api/education`
+
 // Fetch education from backend API
 const fetchEducation = async () => {
   try {
     isLoading.value = true
-    const response = await fetch('http://localhost:5000/api/education')
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
-    }
-
-    const result = await response.json()
-
-    if (result.success && result.data) {
-      educationHistory.value = result.data
+    const result = await axios.get(API_URL)
+    if (result.data.success && result.data.data) {
+      educationHistory.value = result.data.data
     } else {
       throw new Error('Invalid response format')
     }
   } catch (err) {
-    console.error('Failed to fetch education:', err)
+    console.error('Gagal mengambil data pendidikan:', err)
     error.value = err.message
-
-    // Fallback to empty array if API fails
     educationHistory.value = []
   } finally {
     isLoading.value = false

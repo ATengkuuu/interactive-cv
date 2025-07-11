@@ -245,6 +245,7 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
+import axios from 'axios'
 import SectionTitle from './SectionTitle.vue'
 
 defineOptions({ name: 'RadialSkillsSection' })
@@ -256,37 +257,27 @@ const skillElements = ref([])
 const leftColumn = ref(null)
 const rightColumn = ref(null)
 
-// Ambient animations state
 const ambientDots = ref([])
 const ambientInterval = ref(null)
 
-// Skills data from API
 const skillsData = ref([])
 const isLoading = ref(true)
 const error = ref(null)
 
-// Fetch skills from backend API
+const API_URL = `${import.meta.env.VITE_API_URL}/api/skills`
+
 const fetchSkills = async () => {
   try {
     isLoading.value = true
-    const response = await fetch('http://localhost:5000/api/skills')
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
-    }
-
-    const result = await response.json()
-
-    if (result.success && result.data) {
-      skillsData.value = result.data
+    const result = await axios.get(API_URL)
+    if (result.data.success && result.data.data) {
+      skillsData.value = result.data.data
     } else {
       throw new Error('Invalid response format')
     }
   } catch (err) {
-    console.error('Failed to fetch skills:', err)
+    console.error('Gagal mengambil data skill:', err)
     error.value = err.message
-
-    // Fallback to empty array if API fails
     skillsData.value = []
   } finally {
     isLoading.value = false
