@@ -471,14 +471,14 @@ const personalLoading = ref(true)
 const fetchPersonalInfo = async () => {
   try {
     personalLoading.value = true
-    const response = await fetch('http://localhost:5000/api/personal')
-    
+    const response = await fetch('https://backend-personalweb.vercel.app/api/personal')
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
     }
-    
+
     const result = await response.json()
-    
+
     if (result.success && result.data) {
       personalInfo.value = result.data
     } else {
@@ -486,7 +486,7 @@ const fetchPersonalInfo = async () => {
     }
   } catch (err) {
     console.error('Failed to fetch personal info:', err)
-    
+
     // Fallback data if API fails
     personalInfo.value = {
       name: 'Agi Muhammad Tengku Aqamaddin',
@@ -687,7 +687,7 @@ const handleImageError = (event) => {
 onMounted(() => {
   // Fetch personal info
   fetchPersonalInfo();
-  
+
   checkDevice();
   checkDarkMode(); // Check initial dark mode state
   setupIntersectionObserver();

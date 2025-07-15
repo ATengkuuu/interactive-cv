@@ -1,49 +1,3 @@
-<script setup>
-import { ref, onMounted } from 'vue'
-import axios from 'axios'
-
-defineOptions({ name: 'PortfolioProjects' });
-
-import SectionTitle from './SectionTitle.vue';
-
-// Projects data from API
-const projects = ref([])
-const isLoading = ref(true)
-const error = ref(null)
-
-const API_URL = `${import.meta.env.VITE_API_URL}/api/projects`
-
-// Fetch projects from backend API
-const fetchProjects = async () => {
-  try {
-    isLoading.value = true
-    const result = await axios.get(API_URL)
-    if (result.data.success && result.data.data) {
-      projects.value = result.data.data
-    } else {
-      throw new Error('Invalid response format')
-    }
-  } catch (err) {
-    console.error('Gagal mengambil data proyek:', err)
-    error.value = err.message
-    projects.value = []
-  } finally {
-    isLoading.value = false
-  }
-}
-
-// Load projects when component mounts
-onMounted(() => {
-  fetchProjects()
-})
-
-// Error handling untuk images
-const handleImageError = (event) => {
-  console.log('Image failed to load:', event.target.src);
-  // Fallback ke data URL image sederhana
-  event.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDUwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI1MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjNjY2Ii8+Cjx0ZXh0IHg9IjI1MCIgeT0iMTUwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iMC4zZW0iPvCfk4YgUHJvamVjdCBJbWFnZTwvdGV4dD4KPHN2Zz4=';
-};
-</script>
 <template>
   <section id="proyek" class="py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
     <div class="container mx-auto px-6">
@@ -179,6 +133,53 @@ const handleImageError = (event) => {
     </div>
   </section>
 </template>
+
+<script setup>
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
+
+defineOptions({ name: 'PortfolioProjects' });
+
+import SectionTitle from './SectionTitle.vue';
+
+// Projects data from API
+const projects = ref([])
+const isLoading = ref(true)
+const error = ref(null)
+
+const API_URL = `${import.meta.env.VITE_API_URL}/api/projects`
+
+// Fetch projects from backend API
+const fetchProjects = async () => {
+  try {
+    isLoading.value = true
+    const result = await axios.get(API_URL)
+    if (result.data.success && result.data.data) {
+      projects.value = result.data.data
+    } else {
+      throw new Error('Invalid response format')
+    }
+  } catch (err) {
+    console.error('Gagal mengambil data proyek:', err)
+    error.value = err.message
+    projects.value = []
+  } finally {
+    isLoading.value = false
+  }
+}
+
+// Load projects when component mounts
+onMounted(() => {
+  fetchProjects()
+})
+
+// Error handling untuk images
+const handleImageError = (event) => {
+  console.log('Image failed to load:', event.target.src);
+  // Fallback ke data URL image sederhana
+  event.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDUwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI1MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjNjY2Ii8+Cjx0ZXh0IHg9IjI1MCIgeT0iMTUwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iMC4zZW0iPvCfk4YgUHJvamVjdCBJbWFnZTwvdGV4dD4KPHN2Zz4=';
+};
+</script>
 
 <style scoped>
 /* Image loading states */

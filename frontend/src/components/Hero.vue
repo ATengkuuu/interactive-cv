@@ -286,7 +286,7 @@ const defaultInterests = [
 const fetchPersonalInfo = async () => {
   try {
     personalLoading.value = true
-    const response = await fetch('http://localhost:5000/api/personal')
+    const response = await fetch('https://backend-personalweb.vercel.app/api/personal')
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
