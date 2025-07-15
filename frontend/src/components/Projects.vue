@@ -61,7 +61,7 @@
             <div class="mb-4">
               <div v-if="project.tech_stack && project.tech_stack.length > 0" class="flex flex-wrap gap-2">
                 <span
-                  v-for="tech in project.tech_stack"
+                  v-for="tech in parseTechStack(project.tech_stack)"
                   :key="tech"
                   class="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-sm font-semibold px-2.5 py-1 rounded-full"
                 >{{ tech }}</span>
@@ -132,6 +132,12 @@ const fetchProjects = async () => {
     isLoading.value = false
   }
 }
+
+const parseTechStack = (stack) => {
+  if (!stack) return []
+  return stack.split(',').map(s => s.trim())
+}
+
 
 onMounted(() => {
   fetchProjects()
